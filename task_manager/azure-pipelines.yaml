@@ -10,9 +10,11 @@ steps:
     inputs:
       channel: 'stable'
       version: 'latest'
-
+  - script: |
+      flutter upgrade
+    displayName: 'Upgrade Flutter'
   - task: FlutterBuild@0
     displayName: 'Build application'
     inputs:
       target: 'apk'
-      projectDirectory: '.'
+      projectDirectory: './task_manager'
