@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/src/features/task_list/domain/models/task_model.dart';
 
 class TaskCubit extends Cubit<List<Task>> {
-  TaskCubit(super.initialState);
+  TaskCubit() : super([]);
 
   void addTask(Task task) {
     final List<Task> newList = List.from(state);
