@@ -6,7 +6,7 @@ pool:
 
 steps:
   - task: FlutterInstall@0
-    displayName: 'Install Flutter SDK'
+    displayName: 'Install Flutter'
     inputs:
       channel: 'stable'
       version: 'latest'
