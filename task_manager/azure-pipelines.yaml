@@ -10,7 +10,7 @@ steps:
       mode: 'auto'
       channel: 'stable'
       version: 'latest'
-  - task: Hey24sheep.flutter.flutter-install.FlutterBuild@0
+  - task: Hey24sheep.flutter.flutter-build.FlutterBuild@0
     displayName: 'Build application'
     inputs:
       target: 'apk'
