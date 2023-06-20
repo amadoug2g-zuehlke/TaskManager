@@ -9,7 +9,7 @@ steps:
     displayName: 'Install Flutter SDK'
     inputs:
       channel: 'stable'
-      version: 'latest'
+      version: '3.10.0'
 
   - task: FlutterBuild@0
     displayName: 'Build application'
