@@ -15,4 +15,4 @@ steps:
     displayName: 'Build application'
     inputs:
       target: 'apk'
-      projectDirectory: '.'
+      projectDirectory: './task_manager'
