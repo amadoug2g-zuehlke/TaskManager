@@ -10,7 +10,7 @@ class TaskCubit extends Cubit<List<Task>> {
     emit(newList);
   }
 
-  void removeTask(Task task) {
+  void deleteTask(Task task) {
     final List<Task> newList = List.from(state);
     newList.removeWhere((item) => item.name == task.taskName);
     emit(newList);
