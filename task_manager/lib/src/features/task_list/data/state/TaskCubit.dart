@@ -12,13 +12,29 @@ class TaskCubit extends Cubit<List<Task>> {
 
   void deleteTask(String name) {
     final List<Task> newList = List.from(state);
-    newList.removeWhere((item) => item.name == name);
+    newList.removeWhere((item) => item.taskName == name);
     emit(newList);
   }
 
-  void updateTask(Task task) {
-    List<Task> newList = List.from(state);
-    // TODO: Update data
+  void updateStatusTask(String name) {
+    final List<Task> newList = state.map((task) {
+      if (task.taskName == name) {
+        return task.copyWith(completed: !task.taskStatus);
+      }
+      return task;
+    }).toList();
+
+    emit(newList);
+  }
+
+  void updateTextTask(String name, String newName) {
+    final List<Task> newList = state.map((task) {
+      if (task.taskName == name) {
+        return task.copyWith(name: newName);
+      }
+      return task;
+    }).toList();
+
     emit(newList);
   }
 }

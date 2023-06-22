@@ -1,11 +1,21 @@
 class Task {
-  Task({required this.name});
+  Task({required String name}) : _name = name;
 
-  final String name;
-  final DateTime date = DateTime.now();
-  final bool completed = false;
+  String _name;
+  final DateTime _date = DateTime.now();
+  bool _completed = false;
 
-  String get taskName => name;
+  DateTime get taskCreationDate => _date;
 
-  bool get taskStatus => completed;
+  String get taskName => _name;
+
+  bool get taskStatus => _completed;
+
+  void updateStatus() => _completed = !_completed;
+
+  Task copyWith({String? name, bool? completed}) {
+    return Task(
+      name: name ?? _name,
+    ).._completed = completed ?? _completed;
+  }
 }

@@ -23,11 +23,20 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   void _addItem(BuildContext context) {
     context.read<TaskCubit>().addTask(Task(name: controller.text));
+    controller.clear();
     Navigator.pop(context);
   }
 
   void _deleteItem(BuildContext context, String name) {
     context.read<TaskCubit>().deleteTask(name);
+  }
+
+  void _updateStatusItem(BuildContext context, String name) {
+    context.read<TaskCubit>().updateStatusTask(name);
+  }
+
+  void _updateTextItem(BuildContext context, String name) {
+    //context.read<TaskCubit>().updateTextTask(name, newName);
   }
 
   void _createDialog(BuildContext context) {
@@ -120,8 +129,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 itemCount: taskList.length,
                 itemBuilder: (context, index) {
                   final task = taskList[index];
-                  return ListTile(
-                    title: Text(task.taskName),
+                  return GestureDetector(
+                    child: CheckboxListTile(
+                      value: task.taskStatus,
+                      onChanged: (bool? value) {
+                        _updateStatusItem(context, task.taskName);
+                      },
+                      title: Text(task.taskName),
+                    ),
                     onLongPress: () => _deleteDialog(context, task.taskName),
                   );
                 },
