@@ -20,3 +20,7 @@ steps:
     inputs:
       target: 'apk'
       projectDirectory: './task_manager'
+  - task: hey24sheep.flutter.flutter-test.FlutterTest@0
+    displayName: 'Test application'
+    inputs:
+      projectDirectory: './task_manager'

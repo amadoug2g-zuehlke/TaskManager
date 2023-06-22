@@ -26,8 +26,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
     Navigator.pop(context);
   }
 
-  void _deleteItem(BuildContext context) {
-    context.read<TaskCubit>().deleteTask(Task(name: controller.text));
+  void _deleteItem(BuildContext context, String name) {
+    context.read<TaskCubit>().deleteTask(name);
   }
 
   void _createDialog(BuildContext context) {
@@ -68,7 +68,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     );
   }
 
-  void _deleteDialog(BuildContext context) {
+  void _deleteDialog(BuildContext context, String name) {
     final Widget cancelButton = TextButton(
       child: const Text("Cancel"),
       onPressed: () => Navigator.pop(context),
@@ -76,7 +76,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     final Widget continueButton = TextButton(
       child: const Text("Yes"),
       onPressed: () {
-        _deleteItem(context);
+        _deleteItem(context, name);
         Navigator.pop(context);
       },
     );
@@ -122,7 +122,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   final task = taskList[index];
                   return ListTile(
                     title: Text(task.taskName),
-                    onLongPress: () => _deleteDialog(context),
+                    onLongPress: () => _deleteDialog(context, task.taskName),
                   );
                 },
               );
