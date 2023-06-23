@@ -129,15 +129,42 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 itemCount: taskList.length,
                 itemBuilder: (context, index) {
                   final task = taskList[index];
-                  return GestureDetector(
-                    child: CheckboxListTile(
+                  return ListTile(
+                    leading: Checkbox(
                       value: task.taskStatus,
                       onChanged: (bool? value) {
                         _updateStatusItem(context, task.taskName);
                       },
-                      title: Text(task.taskName),
                     ),
-                    onLongPress: () => _deleteDialog(context, task.taskName),
+                    title: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            task.taskName,
+                            style: task.taskStatus
+                                ? const TextStyle(
+                                    color: Colors.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                  )
+                                : const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _updateTextItem(context, task.taskName);
+                          },
+                          icon: const Icon(Icons.edit),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _deleteDialog(context, task.taskName);
+                          },
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ],
+                    ),
                   );
                 },
               );
