@@ -8,7 +8,7 @@ import 'package:task_manager/src/features/task_list/presentation/screens/task_li
 
 void main() {
   group('TaskListScreen', () {
-    group('Action lists', () {
+    group('Unit tests', () {
       test(
         'addTask adds item to Cubit',
         () {
@@ -85,7 +85,7 @@ void main() {
         );
       });
     });
-    group('Action Dialogs', () {
+    group('Widget tests', () {
       testWidgets('list be should empty on start', (tester) async {
         await tester.pumpWidget(const MyApp());
 

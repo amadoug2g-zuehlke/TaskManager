@@ -1,9 +1,10 @@
 class Task {
   Task({required String name}) : _name = name;
 
-  String _name;
+  final String _name;
   final DateTime _date = DateTime.now();
   bool _completed = false;
+  bool _isEditing = false;
 
   DateTime get taskCreationDate => _date;
 
@@ -11,11 +12,13 @@ class Task {
 
   bool get taskStatus => _completed;
 
-  void updateStatus() => _completed = !_completed;
+  bool get taskEditingStatus => _isEditing;
 
-  Task copyWith({String? name, bool? completed}) {
+  Task copyWith({String? name, bool? completed, bool? isEditing}) {
     return Task(
       name: name ?? _name,
-    ).._completed = completed ?? _completed;
+    )
+      .._completed = completed ?? _completed
+      .._isEditing = isEditing ?? _isEditing;
   }
 }

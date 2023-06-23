@@ -13,17 +13,20 @@ class TaskListScreen extends StatefulWidget {
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
-  final controller = TextEditingController();
+  final createTaskController = TextEditingController();
+  final editTaskController = TextEditingController();
+  bool isEditing = false;
 
   @override
   void dispose() {
-    controller.dispose();
+    createTaskController.dispose();
+    editTaskController.dispose();
     super.dispose();
   }
 
   void _addItem(BuildContext context) {
-    context.read<TaskCubit>().addTask(Task(name: controller.text));
-    controller.clear();
+    context.read<TaskCubit>().addTask(Task(name: createTaskController.text));
+    createTaskController.clear();
     Navigator.pop(context);
   }
 
@@ -35,8 +38,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
     context.read<TaskCubit>().updateStatusTask(name);
   }
 
-  void _updateTextItem(BuildContext context, String name) {
-    //context.read<TaskCubit>().updateTextTask(name, newName);
+  void _updateEditingStatusItem(BuildContext context, String name) {
+    context.read<TaskCubit>().updateEditingStatusTask(name);
+  }
+
+  void _updateTextItem(BuildContext context, String name, String newName) {
+    _updateEditingStatusItem(context, name);
+    context.read<TaskCubit>().updateTextTask(name, newName);
+    editTaskController.clear();
   }
 
   void _createDialog(BuildContext context) {
@@ -56,7 +65,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: TextField(
-              controller: controller,
+              controller: createTaskController,
               decoration: const InputDecoration(
                 hintText: "Title",
               ),
@@ -66,8 +75,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
             padding: const EdgeInsets.only(top: 40),
             child: ElevatedButton(
               onPressed: () {
-                //_addItem(context);
-                controller.text.isNotEmpty ? _addItem(context) : null;
+                createTaskController.text.isNotEmpty ? _addItem(context) : null;
               },
               child: const Text("Create"),
             ),
@@ -109,16 +117,20 @@ class _TaskListScreenState extends State<TaskListScreen> {
     );
   }
 
+  void _updateDialog(BuildContext context, int index) {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Task Manager"),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _createDialog(context),
-        child: const Icon(
-          Icons.add,
+      floatingActionButton: Visibility(
+        child: FloatingActionButton(
+          onPressed: () => _createDialog(context),
+          child: const Icon(
+            Icons.add,
+          ),
         ),
       ),
       body: SafeArea(
@@ -129,43 +141,76 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 itemCount: taskList.length,
                 itemBuilder: (context, index) {
                   final task = taskList[index];
-                  return ListTile(
-                    leading: Checkbox(
-                      value: task.taskStatus,
-                      onChanged: (bool? value) {
-                        _updateStatusItem(context, task.taskName);
-                      },
-                    ),
-                    title: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            task.taskName,
-                            style: task.taskStatus
-                                ? const TextStyle(
-                                    color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough,
-                                  )
-                                : const TextStyle(
-                                    color: Colors.black,
-                                  ),
+                  return task.taskEditingStatus
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: editTaskController
+                                    ..text = task.taskName,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _updateTextItem(
+                                    context,
+                                    task.taskName,
+                                    editTaskController.text,
+                                  );
+                                },
+                                icon: const Icon(Icons.check),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _updateStatusItem(context, task.taskName);
+                                },
+                                icon: const Icon(Icons.close),
+                              ),
+                            ],
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _updateTextItem(context, task.taskName);
-                          },
-                          icon: const Icon(Icons.edit),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _deleteDialog(context, task.taskName);
-                          },
-                          icon: const Icon(Icons.delete),
-                        ),
-                      ],
-                    ),
-                  );
+                        )
+                      : ListTile(
+                          leading: Checkbox(
+                            value: task.taskStatus,
+                            onChanged: (bool? value) {
+                              _updateStatusItem(context, task.taskName);
+                            },
+                          ),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  task.taskName,
+                                  style: task.taskStatus
+                                      ? const TextStyle(
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        )
+                                      : const TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _updateEditingStatusItem(
+                                    context,
+                                    task.taskName,
+                                  );
+                                },
+                                icon: const Icon(Icons.edit),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _deleteDialog(context, task.taskName);
+                                },
+                                icon: const Icon(Icons.delete),
+                              ),
+                            ],
+                          ),
+                        );
                 },
               );
             },

@@ -27,9 +27,20 @@ class TaskCubit extends Cubit<List<Task>> {
     emit(newList);
   }
 
-  void updateTextTask(String name, String newName) {
+  void updateEditingStatusTask(String name) {
     final List<Task> newList = state.map((task) {
       if (task.taskName == name) {
+        return task.copyWith(isEditing: !task.taskEditingStatus);
+      }
+      return task;
+    }).toList();
+
+    emit(newList);
+  }
+
+  void updateTextTask(String oldName, String newName) {
+    final List<Task> newList = state.map((task) {
+      if (task.taskName == oldName) {
         return task.copyWith(name: newName);
       }
       return task;
